@@ -5,11 +5,7 @@
 
 #### Objetivo
 
-1. Criar um clone com um aspeto mais recente do Flash Gordon em Pygame.
-
-#### Repositório de código
-
-1) Link para o repositório do GitHub: <a href=" https://github.com/xico2001pt/flashgordon-atari">https://github.com/xico2001pt/flashgordon-atari<a>
+Criar um clone com um aspeto mais recente do [Flash Gordon](http://www.free80sarcade.com/2600_Flash_Gordon.php) (Atari 2600) em Pygame.
 
 #### Descrição
 
@@ -26,16 +22,30 @@ O jogador perde quando é atingido pelos adversários três vezes.
 
 #### Tarefas
 
-1. Matriz para o mapa (2 semanas)
-  1. fazer uma matriz de inteiros (tamanho do mapa=32x8), em que teremos:
-    * vazio=0
-    * parede=1
-    * rescue=2
-  2. Desenhar os objetos (cada objeto deverá ter 25x25 porque o mapa vai ter largura=32; se queremos usar uma resolução de 800x600, então 800/32=25)
-  3. Navegação da nave usando as teclas de cursor
-
-2. Desenhar ecrã de cima: 
-
-3. TO CONTINUE...
+1. **MATRIZ PARA O MAPA**
+   1. fazer uma matriz de inteiros (tamanho do mapa=32x8), em que teremos:
+      * vazio=0
+      * parede=1
+      * rescue=2
+   1. Desenhar os objetos no ecrã
+      * para já cada objeto deverá ter 25x25 porque assim vai ocupar 25*32=800 pixeis, que é um tamanho razoável
+1. **DESENHAR ECRÃ CIMA**
+   1. Desenhar nave
+       * Sugiro tentar manter o tamanho das coisas múltiplos de 25
+       * Ou seja, a nave poderia ser 75x50
+   1. Navegação da nave usando as teclas de cursor
+   1. Desenhar também no mapa
+1. **COLISÃO NO MAPA**
+   1. Não deixar nave mover se for contra alguma parede no mapa
+   1. Quando chega a um rescue, desenhar 5 inimigos no ecrã de cima
+1. **COLISÃO ECRÃ DE CIMA**
+   1. Quando existe colisão nave com inimigo => perde uma vida
+   1. Nave pode disparar
+      * existe uma lista com posição dos tiros
+      * existe outra lista com direcção dos tiros
+      * usar esta informação para desenhar e mover os tiros em cada ciclo
+   1. Quando existe colisão tiro com inimigo => inimigo desaparece
+1. **DESENHAR ESTRELAS / DESENHAR VIDAS**
+1. **MENU**
 
 18/11/2019
