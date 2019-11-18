@@ -33,8 +33,9 @@ O jogador perde quando é atingido pelos adversários três vezes.
    1. Desenhar nave
        * Sugiro tentar manter o tamanho das coisas múltiplos de 25
        * Ou seja, a nave poderia ser 75x50
-   1. Navegação da nave usando as teclas de cursor
    1. Desenhar também no mapa
+1. **TECLAS**
+   * Navegação da nave usando as teclas de cursor
 1. **COLISÃO NO MAPA**
    1. Não deixar nave mover se for contra alguma parede no mapa
    1. Quando chega a um rescue, desenhar 5 inimigos no ecrã de cima
