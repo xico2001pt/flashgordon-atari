@@ -1,30 +1,20 @@
-# Projeto \<nome\>
+# Projeto Flash Gordon
 ### FPRO/MIEIC, 2019/20
-### \<Fulano de Tal up2019xxxxx@fe.up.pt\>
-### \<1MIEIC0X\> 
+### Francisco Gonçalves Cerqueira (up201905337@fe.up.pt)
+### 1MIEIC07 
 
 #### Objetivo
 
-1. \<Criar um clone do clássico Sokoban em Pygame\>
-
-2. \<Em alternativa... do clássico x em Pygame\>
+1. Criar um clone com um aspeto mais recente do Flash Gordon em Pygame.
 
 #### Repositório de código
 
-1) Link para o repositório do GitHub: \<https://github.com/fpro-feup/public\>
-
-2) Adicionar os profs da Unidade:
-
-- https://github.com/fernandocassola
-- https://github.com/rpmcruz
-- https://github.com/jlopes60
-- https://github.com/rcamacho
+1) Link para o repositório do GitHub: <a href=" https://github.com/xico2001pt/flashgordon-atari">https://github.com/xico2001pt/flashgordon-atari<a>
 
 #### Descrição
 
-\<É um jogo de puzzle em que o objetivo do jogo é empurrar caixotes para um sítio indicado. 
-Para empurrar o caixote é preciso ir ao outro lado empurrá-lo. 
-Ou seja, se ele ficar junto à parede, a pessoa precisa de reiniciar o jogo. Estamos a utilizar os níveis do XSokoban.\>
+Neste jogo, o jogador terá de se movimentar ao longo de um labirinto, indicado na metade inferior, com o objetivo de eliminar todos os inimigos. Para isso, o jogador terá de gerir a sua atenção entre as duas metades do ecrã.
+O jogador perde quando é atingido pelos adversários três vezes.
 
 #### UI
 
@@ -36,9 +26,6 @@ Ou seja, se ele ficar junto à parede, a pessoa precisa de reiniciar o jogo. Est
 
 #### Tarefas
 
-1. carregar os níveis
-1. desenhar a matriz do nível
-1. ler teclas e mover as peças
-2. verificar se jogador chegou ao fim do nível
+1.
 
-\<date\>
+18/11/2019
