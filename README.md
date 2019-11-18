@@ -26,6 +26,16 @@ O jogador perde quando é atingido pelos adversários três vezes.
 
 #### Tarefas
 
-1.
+1. Matriz para o mapa (2 semanas)
+  1. fazer uma matriz de inteiros (tamanho do mapa=32x8), em que teremos:
+    * vazio=0
+    * parede=1
+    * rescue=2
+  2. Desenhar os objetos (cada objeto deverá ter 25x25 porque o mapa vai ter largura=32; se queremos usar uma resolução de 800x600, então 800/32=25)
+  3. Navegação da nave usando as teclas de cursor
+
+2. Desenhar ecrã de cima: 
+
+3. TO CONTINUE...
 
 18/11/2019
