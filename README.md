@@ -18,7 +18,7 @@ O jogador perde quando é atingido pelos adversários três vezes.
 
 #### UI
 
-![UI](https://github.com/fpro-feup/public/blob/master/assigns/ui.png)
+![UI](https://github.com/xico2001pt/flashgordon-atari/blob/master/flash_gordon_ui.jpg)
 
 ### Pacotes
 
