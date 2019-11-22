@@ -1,4 +1,4 @@
-# Projeto Flash Gordon
+# Projeto "New Flash Gordon"
 ### FPRO/MIEIC, 2019/20
 ### Francisco Gonçalves Cerqueira (up201905337@fe.up.pt)
 ### 1MIEIC07 
@@ -26,9 +26,9 @@ O jogador perde quando é atingido pelos adversários três vezes.
    1. fazer uma matriz de inteiros (tamanho do mapa=32x8), em que teremos:
       * vazio=0
       * parede=1
-      * rescue=2
    1. Desenhar os objetos no ecrã
       * para já cada objeto deverá ter 25x25 porque assim vai ocupar 25*32=800 pixeis, que é um tamanho razoável
+      * colocar pontos de rescue ao longo do mapa
 1. **DESENHAR ECRÃ CIMA**
    1. Desenhar nave
        * Sugiro tentar manter o tamanho das coisas múltiplos de 25
@@ -39,6 +39,7 @@ O jogador perde quando é atingido pelos adversários três vezes.
 1. **COLISÃO NO MAPA**
    1. Não deixar nave mover se for contra alguma parede no mapa
    1. Quando chega a um rescue, desenhar 5 inimigos no ecrã de cima
+   1. Transportar o jogador quando este chega aos extremos
 1. **COLISÃO ECRÃ DE CIMA**
    1. Quando existe colisão nave com inimigo => perde uma vida
    1. Nave pode disparar
@@ -47,6 +48,6 @@ O jogador perde quando é atingido pelos adversários três vezes.
       * usar esta informação para desenhar e mover os tiros em cada ciclo
    1. Quando existe colisão tiro com inimigo => inimigo desaparece
 1. **DESENHAR ESTRELAS / DESENHAR VIDAS**
-1. **MENU**
+1. **MENU + CONSOLA**
 
 18/11/2019
