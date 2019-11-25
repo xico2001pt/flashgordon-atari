@@ -22,7 +22,7 @@ O jogador perde quando é atingido pelos adversários três vezes.
 
 #### Tarefas
 
-1. **MATRIZ PARA O MAPA**
+1. ~**MATRIZ PARA O MAPA**~
    1. fazer uma matriz de inteiros (tamanho do mapa=32x8), em que teremos:
       * vazio=0
       * parede=1
