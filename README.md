@@ -35,32 +35,39 @@ O jogador perde quando é atingido pelos adversários três vezes.
    1. Desenhar também no mapa
 1. ~**TECLAS**~
    * Navegação da nave usando as teclas de cursor
-1. **COLISÃO NO MAPA**
+1. ~**COLISÃO NO MAPA**~
    1. Não deixar nave mover se for contra alguma parede no mapa
    1. Quando chega a um rescue, desenhar 5 inimigos no ecrã de cima
-      * Recolher posição do jogador para decidir em qual lado os inimigos aparecem
-      * Usar aleatoriedade para decidir a direção que se desloca
+      * Usar aleatoriedade para decidir o tipo de inimigo e a direção do movimento
+      * Remover rescue point correspondente
    1. Transportar o jogador quando este chega aos extremos
-1. **COLISÃO ECRÃ DE CIMA**
+~1. **COLISÃO ECRÃ DE CIMA**~
+   1. A nave não deve ultrapassar o ecrã
    1. Quando existe colisão da nave com inimigo, o jogador perde uma vida
    1. Nave pode disparar
-      * existe uma lista com posição dos tiros
-      * existe outra lista com direcção dos tiros
-      * usar esta informação para desenhar e mover os tiros em cada ciclo
-   1. Quando existe colisão tiro com inimigo, o inimigo desaparece
-1. **DESENHAR ESTRELAS / DESENHAR VIDAS**
+   1. Quando existe colisão tiro com inimigo, o inimigo e o tiro desaparecem
+1. **DESENHAR VIDAS**
    * Implementar sistema de vida do jogador
    * Adicionar tempo de recuperação após perder uma vida
    * O nível termina quando não existem mais vidas
 1. **MENU**
+   * Ao iniciar o jogo deve ser apresentada uma tela inicial
 1. **CONSOLA**
    1. Aspetos Gráficos
-   1. Configurações
+   1. Botões
+      * Reset: Começar o jogo de novo (Implementado posterioremente)
       * FPS: Configurar FPS do jogo
       * Style: Alterar o estilo e as cores do jogo
    1. Pontuação
       * Adicionar contador com a pontuação do jogador
-1. **EFEITOS SONOROS + RESTART**
-1. **BÓNUS: Tornado**
+1. **RESTART**
+   1. Opção para reiniciar partida
+   1. Todos os rescue points coletados
+      * O jogo reinicia mantendo a pontuação, vidas e aumentando a velocidade dos inimigos
+   1. A partida termina
+      * São apresentadas as pontuações da partida atual e da mais elevada de todas as partidas realizadas
+1. **EFEITOS SONOROS**
+   * Todas as ações realizadas devem ter um som associado
+1. **BÓNUS: TORNADO**
 
 18/11/2019
