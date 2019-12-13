@@ -41,25 +41,25 @@ O jogador perde quando é atingido pelos adversários três vezes.
       * Usar aleatoriedade para decidir o tipo de inimigo e a direção do movimento
       * Remover rescue point correspondente
    1. Transportar o jogador quando este chega aos extremos
-~1. **COLISÃO ECRÃ DE CIMA**~
+1. ~**COLISÃO ECRÃ DE CIMA**~
    1. A nave não deve ultrapassar o ecrã
    1. Quando existe colisão da nave com inimigo, o jogador perde uma vida
    1. Nave pode disparar
    1. Quando existe colisão tiro com inimigo, o inimigo e o tiro desaparecem
-1. **DESENHAR VIDAS**
+1. ~**DESENHAR VIDAS**~
    * Implementar sistema de vida do jogador
    * Adicionar tempo de recuperação após perder uma vida
    * O nível termina quando não existem mais vidas
-1. **MENU**
-   * Ao iniciar o jogo deve ser apresentada uma tela inicial
-1. **CONSOLA**
+1. ~**CONSOLA**~
    1. Aspetos Gráficos
    1. Botões
-      * Reset: Começar o jogo de novo (Implementado posterioremente)
+      * Reset: Começar o jogo de novo
       * FPS: Configurar FPS do jogo
-      * Style: Alterar o estilo e as cores do jogo
-   1. Pontuação
-      * Adicionar contador com a pontuação do jogador
+   1. Visor
+      * Pontuação
+      * Vidas
+1. **MENU**
+   * Ao iniciar o jogo deve ser apresentada uma tela inicial
 1. **RESTART**
    1. Opção para reiniciar partida
    1. Todos os rescue points coletados
@@ -69,5 +69,7 @@ O jogador perde quando é atingido pelos adversários três vezes.
 1. **EFEITOS SONOROS**
    * Todas as ações realizadas devem ter um som associado
 1. **BÓNUS: TORNADO**
+   * Área com grande concentração de inimigos
+   * Caso não esteja nesta área, inimigos devem surgir aleatoriamente com pouca frequência
 
 18/11/2019
