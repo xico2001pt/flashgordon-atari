@@ -58,18 +58,22 @@ O jogador perde quando é atingido pelos adversários três vezes.
    1. Visor
       * Pontuação
       * Vidas
-1. **MENU**
-   * Ao iniciar o jogo deve ser apresentada uma tela inicial
+1. **MENUS**
+   1. Ao iniciar o jogo deve ser apresentada uma tela inicial
+   1. Quando a partida termina, é apresentado o menu de pontuação
 1. **RESTART**
    1. Opção para reiniciar partida
    1. Todos os rescue points coletados
       * O jogo reinicia mantendo a pontuação, vidas e aumentando a velocidade dos inimigos
    1. A partida termina
       * São apresentadas as pontuações da partida atual e da mais elevada de todas as partidas realizadas
+1. **RETOQUES FINAIS**
+   1. Tornado
+      * Área com grande concentração de inimigos
+      * Caso o jogador não esteja nesta área, inimigos devem surgir aleatoriamente com pouca frequência
+   1. Estrelas
+      * Objeto meramente decorativo, permitindo uma ilusão de movimento
 1. **EFEITOS SONOROS**
    * Todas as ações realizadas devem ter um som associado
-1. **BÓNUS: TORNADO**
-   * Área com grande concentração de inimigos
-   * Caso não esteja nesta área, inimigos devem surgir aleatoriamente com pouca frequência
 
 18/11/2019
