@@ -58,10 +58,10 @@ O jogador perde quando é atingido pelos adversários três vezes.
    1. Visor
       * Pontuação
       * Vidas
-1. **MENUS**
+1. ~**MENUS**~
    1. Ao iniciar o jogo deve ser apresentada uma tela inicial
    1. Quando a partida termina, é apresentado o menu de pontuação
-1. **RESTART**
+1. ~**RESTART**~
    1. Opção para reiniciar partida
    1. Todos os rescue points coletados
       * O jogo reinicia mantendo a pontuação, vidas e aumentando a velocidade dos inimigos
