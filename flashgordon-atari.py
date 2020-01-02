@@ -5,8 +5,15 @@ WIDTH = 800
 HEIGHT = 600
 fps = 30
 
+pygame.init()
+pygame.mixer.init()
+
 # load
 # ICON = pygame.image.load('./assets/textures/icon.png')
+MENU_SOUND = pygame.mixer.music.load('./assets/sounds/flash_gordon_theme.mp3')
+LASER = pygame.mixer.Sound('./assets/sounds/laser.wav')
+COLLISION = pygame.mixer.Sound('./assets/sounds/collision.wav')
+MAYDAY = pygame.mixer.Sound('./assets/sounds/mayday.wav')
 BACKGROUND = pygame.image.load('./assets/textures/background.png')
 START = pygame.image.load('./assets/textures/start.png')
 CONSOLE = pygame.image.load('./assets/textures/console.png')
@@ -29,6 +36,7 @@ ENEMY_SPAWN2 = pygame.image.load('./assets/textures/enemy_spawn2.png')
 RESCUE = pygame.image.load('./assets/textures/rescue.png')
 SHIELD = pygame.image.load('./assets/textures/shield.png')
 SPACESHIP = pygame.image.load('./assets/textures/spaceship.png')
+ENEMY0 = pygame.image.load('./assets/textures/enemy0.png')
 ENEMY1 = pygame.image.load('./assets/textures/enemy1.png')
 ENEMY2 = pygame.image.load('./assets/textures/enemy2.png')
 ENEMY3 = pygame.image.load('./assets/textures/enemy3.png')
@@ -68,19 +76,27 @@ enemies_alive = False
 shooting = False
 recover = False
 mouse_pressed = True
-shot_time = False
+shot_time, pause_time = False, False
 enemy_x = [0]*5
 ENEMY_WIDTH = ENEMY1.get_width()
 ENEMY_HEIGHT = ENEMY1.get_height()
 SPACESHIP_WIDTH = SPACESHIP.get_width()
 SPACESHIP_HEIGHT = SPACESHIP.get_height()
+tornados = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])]
+TORNADO_DT = 40
+tornado_spawn = False
+tornado_move_time = pygame.time.get_ticks()
+opposite_dir = {'N':'S', 'S':'N', 'E':'O', 'O':'E'}
+paused = False
+message_sent = True
 
 # colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 85, 212)
-BROWN = (180, 100, 30)
+BROWN = (155, 83, 30)
 PURPLE = (170, 0, 210)
+ORANGE = (255, 170, 42)
 
 # functions
 def intersects(x1, y1, w1, h1, x2, y2, w2, h2):
@@ -111,7 +127,7 @@ def draw_score(score, x, y):
         screen.blit(number, (x+35*idx, y))
 
 def reset():
-    global lives, score, xs, ys, xis, yis, rescue_points, star_x, star_y, right_side, enemy_spawn, spawn_time, enemies_alive, shooting, recover
+    global lives, score, xs, ys, xis, yis, rescue_points, star_x, star_y, right_side, enemy_spawn, enemy_vel, spawn_time, enemies_alive, shooting, recover, tornados, tornado_spawn, message_sent
     lives, score = 3, 0
     xs, ys = XS0, YS0
     xis, yis = XIS0, YIS0
@@ -119,17 +135,20 @@ def reset():
     star_x, star_y = 185, 0
     right_side = True
     enemy_spawn = False
+    enemy_vel = 0.11
     spawn_time = False
     enemies_alive = False
     shooting = False
     recover = False
+    tornados = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])]
+    tornado_spawn = False
+    message_sent = True
 
 # game setup
-pygame.init()
-pygame.mixer.init()  # permite som
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("New Flash Gordon")
 # pygame.display.set_icon(ICON)
+pygame.mixer.music.play(-1)
 clock = pygame.time.Clock()
 anima = pygame.time.get_ticks()
 
@@ -140,6 +159,7 @@ while running:
 
     # events
     (mouse_x, mouse_y) = pygame.mouse.get_pos()
+    keys = pygame.key.get_pressed()
     if not mouse_pressed and pygame.mouse.get_pressed()[0]:
         if 70 <= mouse_x <= 110 and 15 <= mouse_y <= 55:
             reset()
@@ -148,14 +168,21 @@ while running:
                 fps = 120
             else:
                 fps = 30
+    if keys[pygame.K_p] and not pause_time:
+        if paused:
+            pygame.mixer.music.rewind()
+            pygame.mixer.music.play(-1)
+        else:
+            pygame.mixer.music.stop()
+        paused = not paused
+    pause_time = keys[pygame.K_p]
     mouse_pressed = pygame.mouse.get_pressed()[0]
 
-    keys = pygame.key.get_pressed()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
     if playing:
-        if lives != 0:
+        if lives > 0:
             if keys[pygame.K_UP] or keys[pygame.K_w]:
                 new_ys = ys - SPACESHIP_VEL * dt
                 if new_ys >= 85:
@@ -163,7 +190,7 @@ while running:
                 new_yis = yis - SPACESHIP_ICON_VEL * dt
                 if not MAP_MATRIX[int(new_yis-350)//25][int(xis)//25] and not MAP_MATRIX[int(new_yis-350)//25][int(xis+9)//25]:
                     yis = new_yis
-                    star_y = (star_y + 0.003 * dt)%2
+                    star_y = (star_y + 0.005 * dt)%2
             if keys[pygame.K_DOWN] or keys[pygame.K_s]:
                 new_ys = ys + SPACESHIP_VEL * dt
                 if new_ys <= 355 - SPACESHIP.get_height():
@@ -171,7 +198,7 @@ while running:
                 new_yis = yis + SPACESHIP_ICON_VEL * dt
                 if not MAP_MATRIX[int(new_yis-350+4)//25][int(xis)//25] and not MAP_MATRIX[int(new_yis-350+4)//25][int(xis+9)//25]:
                     yis = new_yis
-                    star_y = (star_y - 0.003 * dt)%2
+                    star_y = (star_y - 0.005 * dt)%2
             if keys[pygame.K_LEFT] or keys[pygame.K_a]:
                 new_xs = xs - SPACESHIP_VEL * dt * 1.5
                 if new_xs > 45:
@@ -191,6 +218,7 @@ while running:
                     star_x -= SPACESHIP_VEL * 2 * dt
                 right_side = True
             if keys[pygame.K_SPACE] and not shooting and not shot_time:
+                LASER.play()
                 shooting = True
                 shot_y = ys + SPACESHIP_HEIGHT / 2 + 2
                 if right_side:
@@ -222,6 +250,7 @@ while running:
                 xs, ys = XS0, YS0
                 xis, yis = XIS0, YIS0
                 enemy_vel += 0.02
+                tornado_spawn = False
         if enemy_spawn:
             enemies_alive = False
             enemy_spawn = False
@@ -239,7 +268,51 @@ while running:
         else:
             stars = STARS0
         spaceship_pos = (xs, ys)
+        
+        # tornado
+        if pygame.time.get_ticks() - tornado_move_time >= TORNADO_DT:
+            tornado_move_time = pygame.time.get_ticks()
+            for idx, (tornado_pos, tornado_dir) in enumerate(tornados):
+                tor_x, tor_y = tornado_pos
+                if lives > 0:
+                    if not intersects(tor_x, tor_y, 25, 25, xis, yis, 10, 5):
+                        if intersects(tor_x, tor_y, 25, 25, tornados[(idx+1)%2][0][0], tornados[(idx+1)%2][0][1], 25, 25):
+                                tornado_dir = opposite_dir[tornado_dir]
+                        if tor_x%25==0 and tor_y%25==0:
+                            if tornado_dir in ('N', 'S'):
+                                if MAP_MATRIX[int(tor_y-350-25)//25][int(tor_x)//25] and tornado_dir == 'N' or tor_y <= 375:
+                                    tornado_dir = 'S'
+                                if MAP_MATRIX[int(tor_y-350+25)//25][int(tor_x)//25] and tornado_dir == 'S' or tor_y >= 550:
+                                    tornado_dir = 'N'
+                                if not MAP_MATRIX[int(tor_y-350)//25][int(tor_x-25)//25] and xis < tor_x:
+                                    tornado_dir = 'O'
+                                if not MAP_MATRIX[int(tor_y-350)//25][int(tor_x+25)//25] and xis > tor_x:
+                                    tornado_dir = 'E'
+                            else:
+                                if MAP_MATRIX[int(tor_y-350)//25][int(tor_x-25)//25] and tornado_dir == 'O' or tor_x <= 25:
+                                    tornado_dir = 'E'
+                                if MAP_MATRIX[int(tor_y-350)//25][int(tor_x+25)//25] and tornado_dir == 'E' or tor_x >= 750:
+                                    tornado_dir = 'O'
+                                if not MAP_MATRIX[int(tor_y-350-25)//25][int(tor_x)//25] and yis < tor_y:
+                                    tornado_dir = 'N'
+                                if not MAP_MATRIX[int(tor_y-350+25)//25][int(tor_x)//25] and yis > tor_y:
+                                    tornado_dir = 'S'
     
+                        if tornado_dir == 'O':
+                            tor_x -= 1
+                        elif tornado_dir == 'E':
+                            tor_x += 1
+                        elif tornado_dir == 'N':
+                            tor_y -= 1
+                        elif tornado_dir == 'S':
+                            tor_y += 1
+                        
+                        tornados[idx] = ((tor_x, tor_y), tornado_dir)
+                    elif not tornado_spawn:
+                        tornado_spawn = True
+                        tor_enemies = [1]*4
+                        tor_enemies_info = [([0, 1],[775, -1])[random.randint(0,1)] for _ in range(4)]
+
         # render
         screen.fill(BLACK)
     
@@ -276,6 +349,7 @@ while running:
                     shooting = False
                     enemy_types[idx] = 0
                 if not recover and enemy_types[idx] != 0 and intersects(xs, ys, SPACESHIP_WIDTH, SPACESHIP_HEIGHT, enemy_x[idx], 88+60*idx, ENEMY_WIDTH, ENEMY_HEIGHT):
+                    COLLISION.play()
                     lives -= 1
                     enemy_types[idx] = 0
                     recover = True
@@ -291,6 +365,32 @@ while running:
                     screen.blit(ENEMY3, (enemy_x[idx], 88+60*idx))
             if dead == 5:
                 enemies_alive = False
+        if tornado_spawn:
+            dead_tor = 0
+            for idx, enemy in enumerate(tor_enemies):
+                tor_enemies_info[idx][0] += enemy_vel * 1.75 * dt * tor_enemies_info[idx][1]
+                if tor_enemies_info[idx][0] < 0 or tor_enemies_info[idx][0] > 775:
+                    tor_enemies[idx] = 0
+                if shooting and tor_enemies[idx] != 0 and intersects(shot_x, shot_y, 30, 5, tor_enemies_info[idx][0], 120+60*idx, 35, 20):
+                    score += 1
+                    shooting = False
+                    tor_enemies[idx] = 0
+                if not recover and tor_enemies[idx] != 0 and intersects(xs, ys, SPACESHIP_WIDTH, SPACESHIP_HEIGHT, tor_enemies_info[idx][0], 120+60*idx, 35, 20):
+                    COLLISION.play()
+                    lives -= 1
+                    tor_enemies[idx] = 0
+                    recover = True
+                    recover_time = pygame.time.get_ticks()
+                    blink = 0
+                if enemy:
+                    if tor_enemies_info[idx][1] == 1:
+                        screen.blit(ENEMY0, (tor_enemies_info[idx][0], 120+60*idx))
+                    else:
+                        screen.blit(pygame.transform.flip(ENEMY0, True, False), (tor_enemies_info[idx][0], 120+60*idx))
+                else:
+                    dead_tor += 1
+            if dead_tor == 4:
+                tornado_spawn = False
         if recover:
             if pygame.time.get_ticks() > recover_time:
                 blink += 1
@@ -304,7 +404,10 @@ while running:
             screen.blit(SPACESHIP, spaceship_pos)
         else:
             screen.blit(pygame.transform.flip(SPACESHIP, True, False), spaceship_pos)
-        if lives == 0:
+        if lives <= 0:
+            if not pygame.mixer.get_busy() and message_sent:
+                MAYDAY.play()
+                message_sent = False
             if score > highscore:
                 highscore = score
             screen.blit(GAME_OVER, (25, 75))
@@ -316,6 +419,8 @@ while running:
             for col in range(32):
                 if MAP_MATRIX[row][col]:
                     pygame.draw.rect(screen, BROWN, (25*col, 350+25*row, 25, 25), 0)
+        for tornado_pos, tornado_dir in tornados:
+            pygame.draw.rect(screen, ORANGE, (tornado_pos[0], tornado_pos[1], 25, 25), 0)
         for x, y in rescue_points:
             screen.blit(RESCUE, (x, y))
         pygame.draw.rect(screen, BLUE, (xis, yis, 10, 5), 0)
@@ -323,13 +428,16 @@ while running:
     else:
         if keys[pygame.K_RETURN]:
             playing = True
+            BACK_MUSIC = pygame.mixer.music.load('./assets/sounds/vultans_theme.mp3')
+            pygame.mixer.music.set_volume(0.3)
+            pygame.mixer.music.play(-1)
         screen.blit(BACKGROUND, (25, 75))
         if pygame.time.get_ticks() > anima:
             press += 1
             anima += 960
         if press % 2:
                 screen.blit(START, (265, 410))
-        
+
     # consola
     screen.blit(CONSOLE, (0, 0))
     for idx in range(lives):
