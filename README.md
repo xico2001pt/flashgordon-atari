@@ -26,6 +26,15 @@ O jogador perde quando é atingido pelos adversários três vezes.
 - Flash's Theme - Queen
 - Vultan's Theme (Attack of the Hawk Men) - Queen
 
+#### Controlos
+
+- Botões:
+  - <b>Reset:</b> Reiniciar a partida
+  - <b>Som:</b> Pausar/recomeçar a música de fundo
+- Teclas:
+  - <b>Setas/ WASD:</b> Movimentar a nave
+  - <b>Espaço</b>: Disparar
+
 #### Tarefas
 
 1. ~**MATRIZ PARA O MAPA**~
