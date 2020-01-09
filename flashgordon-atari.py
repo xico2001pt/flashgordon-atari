@@ -3,13 +3,13 @@ import random
 
 WIDTH = 800
 HEIGHT = 600
-fps = 30
+fps = 120
 
 pygame.init()
 pygame.mixer.init()
 
 # load
-# ICON = pygame.image.load('./assets/textures/icon.png')
+ICON = pygame.image.load('./assets/textures/icon.png')
 MENU_SOUND = pygame.mixer.music.load('./assets/sounds/flash_gordon_theme.mp3')
 LASER = pygame.mixer.Sound('./assets/sounds/laser.wav')
 COLLISION = pygame.mixer.Sound('./assets/sounds/collision.wav')
@@ -63,8 +63,8 @@ XIS0, YIS0 = 395, 485
 xs, ys = XS0, YS0
 xis, yis = XIS0, YIS0
 star_x, star_y = 185, 0
-SPACESHIP_VEL = 0.16
-SPACESHIP_ICON_VEL = 0.025
+SPACESHIP_VEL = 0.15
+SPACESHIP_ICON_VEL = 0.02
 enemy_vel = 0.11
 SHOT_VEL = 1.3
 press = 0
@@ -83,9 +83,8 @@ ENEMY_HEIGHT = ENEMY1.get_height()
 SPACESHIP_WIDTH = SPACESHIP.get_width()
 SPACESHIP_HEIGHT = SPACESHIP.get_height()
 tornados = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])]
-TORNADO_DT = 40
+tornado_dt = 30
 tornado_spawn = False
-tornado_move_time = pygame.time.get_ticks()
 opposite_dir = {'N':'S', 'S':'N', 'E':'O', 'O':'E'}
 paused = False
 message_sent = True
@@ -127,7 +126,7 @@ def draw_score(score, x, y):
         screen.blit(number, (x+35*idx, y))
 
 def reset():
-    global lives, score, xs, ys, xis, yis, rescue_points, star_x, star_y, right_side, enemy_spawn, enemy_vel, spawn_time, enemies_alive, shooting, recover, tornados, tornado_spawn, message_sent
+    global lives, score, xs, ys, xis, yis, rescue_points, star_x, star_y, right_side, enemy_spawn, enemy_vel, spawn_time, enemies_alive, shooting, recover, tornados, tornado_spawn, tornado_dt, message_sent
     lives, score = 3, 0
     xs, ys = XS0, YS0
     xis, yis = XIS0, YIS0
@@ -141,13 +140,13 @@ def reset():
     shooting = False
     recover = False
     tornados = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])]
-    tornado_spawn = False
+    tornado_spawn, tornado_dt = False, 30
     message_sent = True
 
 # game setup
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("New Flash Gordon")
-# pygame.display.set_icon(ICON)
+pygame.display.set_icon(ICON)
 pygame.mixer.music.play(-1)
 clock = pygame.time.Clock()
 anima = pygame.time.get_ticks()
@@ -161,21 +160,15 @@ while running:
     (mouse_x, mouse_y) = pygame.mouse.get_pos()
     keys = pygame.key.get_pressed()
     if not mouse_pressed and pygame.mouse.get_pressed()[0]:
-        if 70 <= mouse_x <= 110 and 15 <= mouse_y <= 55:
+        if 70 <= mouse_x <= 112 and 13 <= mouse_y <= 55:
             reset()
-        elif 660 <= mouse_x <= 725 and 15 <= mouse_y <= 55:
-            if fps == 30:
-                fps = 120
+        elif 688 <= mouse_x <= 730 and 13 <= mouse_y <= 55:
+            if paused:
+                pygame.mixer.music.rewind()
+                pygame.mixer.music.play(-1)
             else:
-                fps = 30
-    if keys[pygame.K_p] and not pause_time:
-        if paused:
-            pygame.mixer.music.rewind()
-            pygame.mixer.music.play(-1)
-        else:
-            pygame.mixer.music.stop()
-        paused = not paused
-    pause_time = keys[pygame.K_p]
+                pygame.mixer.music.stop()
+            paused = not paused
     mouse_pressed = pygame.mouse.get_pressed()[0]
 
     for event in pygame.event.get():
@@ -220,7 +213,7 @@ while running:
             if keys[pygame.K_SPACE] and not shooting and not shot_time:
                 LASER.play()
                 shooting = True
-                shot_y = ys + SPACESHIP_HEIGHT / 2 + 2
+                shot_y = ys + SPACESHIP_HEIGHT / 2 + 1.5
                 if right_side:
                     shot_x = xs + SPACESHIP_WIDTH + 5
                     shot_dir = 1
@@ -251,6 +244,7 @@ while running:
                 xis, yis = XIS0, YIS0
                 enemy_vel += 0.02
                 tornado_spawn = False
+                tornado_dt -= 2
         if enemy_spawn:
             enemies_alive = False
             enemy_spawn = False
@@ -270,12 +264,12 @@ while running:
         spaceship_pos = (xs, ys)
         
         # tornado
-        if pygame.time.get_ticks() - tornado_move_time >= TORNADO_DT:
-            tornado_move_time = pygame.time.get_ticks()
+        while pygame.time.get_ticks() - tornado_move_time >= tornado_dt:
+            tornado_move_time += tornado_dt
             for idx, (tornado_pos, tornado_dir) in enumerate(tornados):
                 tor_x, tor_y = tornado_pos
                 if lives > 0:
-                    if not intersects(tor_x, tor_y, 25, 25, xis, yis, 10, 5):
+                    if not intersects(tor_x+10, tor_y+5, 25-20, 25-10, xis, yis, 10, 5):
                         if intersects(tor_x, tor_y, 25, 25, tornados[(idx+1)%2][0][0], tornados[(idx+1)%2][0][1], 25, 25):
                                 tornado_dir = opposite_dir[tornado_dir]
                         if tor_x%25==0 and tor_y%25==0:
@@ -299,13 +293,13 @@ while running:
                                     tornado_dir = 'S'
     
                         if tornado_dir == 'O':
-                            tor_x -= 1
+                            tor_x -= 0.5
                         elif tornado_dir == 'E':
-                            tor_x += 1
+                            tor_x += 0.5
                         elif tornado_dir == 'N':
-                            tor_y -= 1
+                            tor_y -= 0.5
                         elif tornado_dir == 'S':
-                            tor_y += 1
+                            tor_y += 0.5
                         
                         tornados[idx] = ((tor_x, tor_y), tornado_dir)
                     elif not tornado_spawn:
@@ -428,6 +422,7 @@ while running:
     else:
         if keys[pygame.K_RETURN]:
             playing = True
+            tornado_move_time = pygame.time.get_ticks()
             BACK_MUSIC = pygame.mixer.music.load('./assets/sounds/vultans_theme.mp3')
             pygame.mixer.music.set_volume(0.3)
             pygame.mixer.music.play(-1)
