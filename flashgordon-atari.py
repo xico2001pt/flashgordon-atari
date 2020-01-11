@@ -3,7 +3,7 @@ import random
 
 WIDTH = 800
 HEIGHT = 600
-fps = 120
+FPS = 120
 
 pygame.init()
 pygame.mixer.init()
@@ -82,10 +82,10 @@ ENEMY_WIDTH = ENEMY1.get_width()
 ENEMY_HEIGHT = ENEMY1.get_height()
 SPACESHIP_WIDTH = SPACESHIP.get_width()
 SPACESHIP_HEIGHT = SPACESHIP.get_height()
-tornados = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])]
+tornado = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])][random.randint(0,1)]
 tornado_dt = 30
+tornado_move_time = 0
 tornado_spawn = False
-opposite_dir = {'N':'S', 'S':'N', 'E':'O', 'O':'E'}
 paused = False
 message_sent = True
 
@@ -126,7 +126,7 @@ def draw_score(score, x, y):
         screen.blit(number, (x+35*idx, y))
 
 def reset():
-    global lives, score, xs, ys, xis, yis, rescue_points, star_x, star_y, right_side, enemy_spawn, enemy_vel, spawn_time, enemies_alive, shooting, recover, tornados, tornado_spawn, tornado_dt, message_sent
+    global lives, score, xs, ys, xis, yis, rescue_points, star_x, star_y, right_side, enemy_spawn, enemy_vel, spawn_time, enemies_alive, shooting, recover, tornado, tornado_spawn, tornado_dt, message_sent
     lives, score = 3, 0
     xs, ys = XS0, YS0
     xis, yis = XIS0, YIS0
@@ -139,7 +139,7 @@ def reset():
     enemies_alive = False
     shooting = False
     recover = False
-    tornados = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])]
+    tornado = [((200,400), ['O','E'][random.randint(0,1)]), ((575,400), ['O','E'][random.randint(0,1)])][random.randint(0,1)]
     tornado_spawn, tornado_dt = False, 30
     message_sent = True
 
@@ -154,7 +154,7 @@ anima = pygame.time.get_ticks()
 # game loop
 running = True
 while running:
-    dt = clock.tick(fps)
+    dt = clock.tick(FPS)
 
     # events
     (mouse_x, mouse_y) = pygame.mouse.get_pos()
@@ -266,46 +266,44 @@ while running:
         # tornado
         while pygame.time.get_ticks() - tornado_move_time >= tornado_dt:
             tornado_move_time += tornado_dt
-            for idx, (tornado_pos, tornado_dir) in enumerate(tornados):
-                tor_x, tor_y = tornado_pos
-                if lives > 0:
-                    if not intersects(tor_x+10, tor_y+5, 25-20, 25-10, xis, yis, 10, 5):
-                        if intersects(tor_x, tor_y, 25, 25, tornados[(idx+1)%2][0][0], tornados[(idx+1)%2][0][1], 25, 25):
-                                tornado_dir = opposite_dir[tornado_dir]
-                        if tor_x%25==0 and tor_y%25==0:
-                            if tornado_dir in ('N', 'S'):
-                                if MAP_MATRIX[int(tor_y-350-25)//25][int(tor_x)//25] and tornado_dir == 'N' or tor_y <= 375:
-                                    tornado_dir = 'S'
-                                if MAP_MATRIX[int(tor_y-350+25)//25][int(tor_x)//25] and tornado_dir == 'S' or tor_y >= 550:
-                                    tornado_dir = 'N'
-                                if not MAP_MATRIX[int(tor_y-350)//25][int(tor_x-25)//25] and xis < tor_x:
-                                    tornado_dir = 'O'
-                                if not MAP_MATRIX[int(tor_y-350)//25][int(tor_x+25)//25] and xis > tor_x:
-                                    tornado_dir = 'E'
-                            else:
-                                if MAP_MATRIX[int(tor_y-350)//25][int(tor_x-25)//25] and tornado_dir == 'O' or tor_x <= 25:
-                                    tornado_dir = 'E'
-                                if MAP_MATRIX[int(tor_y-350)//25][int(tor_x+25)//25] and tornado_dir == 'E' or tor_x >= 750:
-                                    tornado_dir = 'O'
-                                if not MAP_MATRIX[int(tor_y-350-25)//25][int(tor_x)//25] and yis < tor_y:
-                                    tornado_dir = 'N'
-                                if not MAP_MATRIX[int(tor_y-350+25)//25][int(tor_x)//25] and yis > tor_y:
-                                    tornado_dir = 'S'
-    
-                        if tornado_dir == 'O':
-                            tor_x -= 0.5
-                        elif tornado_dir == 'E':
-                            tor_x += 0.5
-                        elif tornado_dir == 'N':
-                            tor_y -= 0.5
-                        elif tornado_dir == 'S':
-                            tor_y += 0.5
-                        
-                        tornados[idx] = ((tor_x, tor_y), tornado_dir)
-                    elif not tornado_spawn:
-                        tornado_spawn = True
-                        tor_enemies = [1]*4
-                        tor_enemies_info = [([0, 1],[775, -1])[random.randint(0,1)] for _ in range(4)]
+            (tornado_pos, tornado_dir) = tornado
+            tor_x, tor_y = tornado_pos
+            if lives > 0:
+                if not intersects(tor_x+9, tor_y+4, 27-20, 27-10, xis, yis, 10, 5):
+                    if tor_x%25==0 and tor_y%25==0:
+                        if tornado_dir in ('N', 'S'):
+                            if MAP_MATRIX[int(tor_y-350-25)//25][int(tor_x)//25] and tornado_dir == 'N' or tor_y <= 375:
+                                tornado_dir = 'S'
+                            if MAP_MATRIX[int(tor_y-350+25)//25][int(tor_x)//25] and tornado_dir == 'S' or tor_y >= 550:
+                                tornado_dir = 'N'
+                            if not MAP_MATRIX[int(tor_y-350)//25][int(tor_x-25)//25] and xis < tor_x:
+                                tornado_dir = 'O'
+                            if not MAP_MATRIX[int(tor_y-350)//25][int(tor_x+25)//25] and xis > tor_x:
+                                tornado_dir = 'E'
+                        else:
+                            if MAP_MATRIX[int(tor_y-350)//25][int(tor_x-25)//25] and tornado_dir == 'O' or tor_x <= 25:
+                                tornado_dir = 'E'
+                            if MAP_MATRIX[int(tor_y-350)//25][int(tor_x+25)//25] and tornado_dir == 'E' or tor_x >= 750:
+                                tornado_dir = 'O'
+                            if not MAP_MATRIX[int(tor_y-350-25)//25][int(tor_x)//25] and yis < tor_y:
+                                tornado_dir = 'N'
+                            if not MAP_MATRIX[int(tor_y-350+25)//25][int(tor_x)//25] and yis > tor_y:
+                                tornado_dir = 'S'
+
+                    if tornado_dir == 'O':
+                        tor_x -= 0.5
+                    elif tornado_dir == 'E':
+                        tor_x += 0.5
+                    elif tornado_dir == 'N':
+                        tor_y -= 0.5
+                    elif tornado_dir == 'S':
+                        tor_y += 0.5
+                    
+                    tornado = ((tor_x, tor_y), tornado_dir)
+                elif not tornado_spawn:
+                    tornado_spawn = True
+                    tor_enemies = [1]*4
+                    tor_enemies_info = [([0, 1],[775, -1])[random.randint(0,1)] for _ in range(4)]
 
         # render
         screen.fill(BLACK)
@@ -413,8 +411,7 @@ while running:
             for col in range(32):
                 if MAP_MATRIX[row][col]:
                     pygame.draw.rect(screen, BROWN, (25*col, 350+25*row, 25, 25), 0)
-        for tornado_pos, tornado_dir in tornados:
-            pygame.draw.rect(screen, ORANGE, (tornado_pos[0], tornado_pos[1], 25, 25), 0)
+        pygame.draw.rect(screen, ORANGE, (tornado[0][0], tornado[0][1], 25, 25), 0)
         for x, y in rescue_points:
             screen.blit(RESCUE, (x, y))
         pygame.draw.rect(screen, BLUE, (xis, yis, 10, 5), 0)
