@@ -12,9 +12,17 @@ Criar um clone com um aspeto mais recente do [Flash Gordon](http://www.free80sar
 Neste jogo, o jogador terá de se movimentar ao longo de um labirinto, indicado na metade inferior, com o objetivo de eliminar todos os inimigos. Para isso, o jogador terá de gerir a sua atenção entre as duas metades do ecrã.
 O jogador perde quando é atingido pelos adversários três vezes.
 
-#### UI
+#### Vídeo Youtube:
+
+[FPRO 2019/20: Flash Gordon (Atari)](https://youtu.be/ZW3vlWzm9sA)
+
+#### Old UI
 
 ![UI](https://github.com/xico2001pt/flashgordon-atari/blob/master/flash_gordon_ui.jpg)
+
+#### New UI
+
+![UI](https://github.com/xico2001pt/flashgordon-atari/blob/master/flash_gordon_new_ui.png)
 
 #### Pacotes
 
@@ -32,7 +40,7 @@ O jogador perde quando é atingido pelos adversários três vezes.
   - <b>Reset:</b> Reiniciar a partida
   - <b>Som:</b> Pausar/recomeçar a música de fundo
 - Teclas:
-  - <b>Setas/ WASD:</b> Movimentar a nave
+  - <b>Setas/WASD:</b> Movimentar a nave
   - <b>Espaço</b>: Disparar
 
 #### Tarefas
